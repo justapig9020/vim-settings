@@ -1,4 +1,4 @@
-"" vim-plug settings
+"" VIM-PLUGIN SETTING START
 call plug#begin('~/.vim/plugged')
 
 "" Formater
@@ -17,26 +17,29 @@ Plug 'jacoborus/tender.vim'
 "" global tag system
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'skywind3000/gutentags_plus'
+
+"" management preview window
 Plug 'skywind3000/vim-preview'
 ""
 
 call plug#end()
-"" vim-plug settings end
+"" VIM-PLUGIN SETTING END
 
-"" ==== CURSOR ====
+
+"" =====================
+"" CURSOR SETTING
 "" cursor move
 imap <C-k> <Esc><Up>a
 imap <C-h> <Left>
 imap <C-l> <Right>
 imap <C-j> <Esc><Down>a
 
-"" Mode Settings
+"" cursor shape in defferent mode
 let &t_SI.="\e[5 q" "SI = INSERT mode
 let &t_SR.="\e[4 q" "SR = REPLACE mode
 let &t_EI.="\e[1 q" "EI = NORMAL mode (ELSE)
 
-"" Cursor settings:
-
+"" cursor settings:
 "  1 -> blinking block
 "  2 -> solid block
 "  3 -> blinking underscore
@@ -44,6 +47,9 @@ let &t_EI.="\e[1 q" "EI = NORMAL mode (ELSE)
 "  5 -> blinking vertical bar
 "  6 -> solid vertical bar
 
+
+"" =====================
+"" TAB SETTING
 "" tab
 set tabstop=4
 set shiftwidth=4
@@ -52,6 +58,9 @@ set expandtab
 "" Use \t as tab in Makefile
 autocmd BufReadPost Makefile,makefile,MakeFile :set expandtab&
 
+
+"" =====================
+"" Display SETTING
 "" line number
 set number
 set relativenumber
@@ -60,24 +69,8 @@ set relativenumber
 set visualbell "" Sound
 set t_vb=      "" Screen flash
 
-"" auto format space and tab before save↵
-command Cln :silent! 1,$s/\t/    /g | :silent! 1,$s/\ \+$//g
-autocmd BufWritePre *.c,*.h,*.py,*.cpp,*.sh :Cln
-
-"" auto format with clang-format
-autocmd BufWritePre *.c,*.h,*.cpp :ClangFormat
-
 "" high light
 syntax on
-
-"" show format character
-set listchars=eol:↵,tab:»·,trail:╳,extends:»,precedes:«
-set list "" Make invisible charaters visible
-
-"" make up
-inoremap ( ()<Esc>i
-inoremap " ""<Esc>i
-inoremap {<CR> {<CR>}<Esc>ko
 
 "" scheme and color
 syntax on
@@ -91,6 +84,31 @@ colorscheme tender
 "" set line number color
 highlight LineNr ctermfg=black ctermbg=60
 
+
+"" =====================
+"" FORMAT SETTING
+"" auto format space and tab before save↵
+command Cln :silent! 1,$s/\t/    /g | :silent! 1,$s/\ \+$//g
+autocmd BufWritePre *.c,*.h,*.py,*.cpp,*.sh :Cln
+
+"" auto format with clang-format
+autocmd BufWritePre *.c,*.h,*.cpp :ClangFormat
+
+"" show format character
+set listchars=eol:↵,tab:»·,trail:╳,extends:»,precedes:«
+set list "" Make invisible charaters visible
+
+
+"" =====================
+"" AUTO COMPLETE
+"" make up
+inoremap ( ()<Esc>i
+inoremap " ""<Esc>i
+inoremap {<CR> {<CR>}<Esc>ko
+
+
+"" =====================
+"" SYMBLE FINDING / DEFINITION
 "" gtags
 "" Find the given files to identify in a project or not
 let g:gutentags_project_root = ['.root', '.svn', '.git', '.hg', '.project']
@@ -107,15 +125,15 @@ endif
 "" Put the tag files into ~/.cache/tags directory
 let g:gutentags_cache_dir = expand('~/.cache/tags')
 
-"" Change focus to quiickfix window after search
-"" let g:gutentags_plug_switch = 1
-
 "" For avoid auto add other project's data (That might be confuse)
 let g:gutentags_auto_add_gtags_cscope = 0
 
 "" enable advanced commands for debuging
 let g:gutentags_define_advanced_commands = 1
 
+
+"" =====================
+"" PREVIEW WINDOW CONTROL
 "" Open/Close preview window in quickfix
 autocmd FileType qf nnoremap <silent><buffer> p :PreviewQuickfix<cr>
 autocmd FileType qf nnoremap <silent><buffer> P :PreviewClose<cr>
