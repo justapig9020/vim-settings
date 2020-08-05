@@ -20,8 +20,11 @@ Plug 'skywind3000/gutentags_plus'
 
 "" management preview window
 Plug 'skywind3000/vim-preview'
-""
 
+"" build project asynchronously
+Plug 'skywind3000/asyncrun.vim'
+
+""
 call plug#end()
 "" VIM-PLUGIN SETTING END
 
@@ -141,3 +144,52 @@ autocmd FileType qf nnoremap <silent><buffer> P :PreviewClose<cr>
 "" Quick scroll preview window
 noremap <S-k> :PreviewScroll -1<cr>
 noremap <S-j> :PreviewScroll +1<cr>
+
+
+"" =====================
+"" BUILD PROJECT
+"" quickfix window height
+let g:asyncrun_open = 6
+
+"" ring the bell while build end
+let g:asyncrun_bell = 1
+
+"" set rootmark to identify project root
+let g:asyncrun_rootmarks = ['.svn', '.git', '.root', '_darcs', 'build.xml'] 
+
+"" Toggle quickfix window (F10)
+nnoremap <F10> :call asyncrun#quickfix_toggle(6)<cr>
+
+"" build makefile by Cmake
+nnoremap <silent> <F3> :AsyncRun -cwd=<root> cmake . <cr>
+
+"" run current file
+nnoremap <silent> <F4> :AsyncRun -raw -cwd=$(VIM_FILEDIR) "$(VIM_FILEDIR)/$(VIM_FILENOEXT)" <cr>
+
+"" build current file
+nnoremap <silent> <F5> :AsyncRun gcc -Wall -O2 "$(VIM_FILEPATH)" -o "$(VIM_FILEDIR)/$(VIM_FILENOEXT)" <cr>
+
+"" build
+nnoremap <silent> <F6> :AsyncRun -cwd=<root> make <cr>
+
+"" build and run
+nnoremap <silent> <F7> :AsyncRun -cwd=<root> -raw make run <cr>
+
+"" build and test
+nnoremap <silent> <F8> :AsyncRun -cwd=<root> -raw make test <cr>
+
+"" compile singal file
+nnoremap <silent> <F9> :AsyncRun gcc -c -Wall -O2 "$(VIM_FILEPATH)" <cr>
+
+"" Help
+function! BuildHelp()
+    echo "<F3> Execute CMake"
+    echo "<F4> Execute current file"
+    echo "<F5> Build current file"
+    echo "<F6> Build project(Makefile)"
+    echo "<F7> Build and run project(run required in Makefile)"
+    echo "<F8> Build and test project(test required in Makefile)"
+    echo "<F9> Compile current file to object file"
+endfunction
+
+command! BuildHelp call BuildHelp()
