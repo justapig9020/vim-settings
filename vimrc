@@ -1,4 +1,5 @@
 "" VIM-PLUGIN SETTING START
+"" To install new plugin -> vim +PlugInstall +qall
 call plug#begin('~/.vim/plugged')
 
 "" Formater
@@ -23,6 +24,23 @@ Plug 'skywind3000/vim-preview'
 
 "" build project asynchronously
 Plug 'skywind3000/asyncrun.vim'
+
+"" dynamic syntax check
+"" FIXME too slow Orz
+""Plug 'dense-analysis/ale'
+
+"" diif check
+Plug 'mhinz/vim-signify', { 'branch': 'legacy' }
+
+"" text object
+Plug 'kana/vim-textobj-user'
+Plug 'kana/vim-textobj-indent'
+Plug 'kana/vim-textobj-syntax'
+Plug 'kana/vim-textobj-function', { 'for':['c', 'cpp', 'vim', 'java'] }
+Plug 'sgur/vim-textobj-parameter'
+
+"" hotkey extention
+Plug 'tpope/vim-unimpaired'
 
 ""
 call plug#end()
@@ -193,3 +211,8 @@ function! BuildHelp()
 endfunction
 
 command! BuildHelp call BuildHelp()
+
+"" =====================
+"" diff check
+set updatetime=100
+command! Diff :SignifyDiff
