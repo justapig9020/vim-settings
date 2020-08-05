@@ -14,6 +14,10 @@ Plug 'rhysd/vim-clang-format', { 'on': 'ClangFormat'}
 "" Plug 'tyrannicaltoucan/vim-deep-space'
 Plug 'jacoborus/tender.vim'
 
+"" global tag system
+Plug 'ludovicchabant/vim-gutentags'
+Plug 'skywind3000/gutentags_plus'
+Plug 'skywind3000/vim-preview'
 ""
 
 call plug#end()
@@ -86,3 +90,36 @@ set cursorcolumn
 colorscheme tender
 "" set line number color
 highlight LineNr ctermfg=black ctermbg=60
+
+"" gtags
+"" Find the given files to identify in a project or not
+let g:gutentags_project_root = ['.root', '.svn', '.git', '.hg', '.project']
+
+"" tag file name
+let g:gutentags_ctags_tagfile = '.tags'
+
+"" Enable gtags
+let g:gutentags_modules = []
+if executable('gtags-cscope') && executable('gtags')
+	let g:gutentags_modules += ['gtags_cscope']
+endif
+
+"" Put the tag files into ~/.cache/tags directory
+let g:gutentags_cache_dir = expand('~/.cache/tags')
+
+"" Change focus to quiickfix window after search
+"" let g:gutentags_plug_switch = 1
+
+"" For avoid auto add other project's data (That might be confuse)
+let g:gutentags_auto_add_gtags_cscope = 0
+
+"" enable advanced commands for debuging
+let g:gutentags_define_advanced_commands = 1
+
+"" Open/Close preview window in quickfix
+autocmd FileType qf nnoremap <silent><buffer> p :PreviewQuickfix<cr>
+autocmd FileType qf nnoremap <silent><buffer> P :PreviewClose<cr>
+
+"" Quick scroll preview window
+noremap <S-k> :PreviewScroll -1<cr>
+noremap <S-j> :PreviewScroll +1<cr>
