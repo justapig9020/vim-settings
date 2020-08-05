@@ -25,6 +25,13 @@ Plug 'skywind3000/vim-preview'
 "" build project asynchronously
 Plug 'skywind3000/asyncrun.vim'
 
+"" fuzzy search(file/function)
+Plug 'Yggdroot/LeaderF'
+
+"" complete
+"" FIXME need python3 support
+"" Plug 'ycm-core/YouCompleteMe'
+
 "" dynamic syntax check
 "" FIXME too slow Orz
 ""Plug 'dense-analysis/ale'
@@ -127,6 +134,16 @@ inoremap ( ()<Esc>i
 inoremap " ""<Esc>i
 inoremap {<CR> {<CR>}<Esc>ko
 
+"" YCM SETTINGS
+"" minimun coplete charactor
+"" let g:ycm_min_num_identifier_candidate_chars = 2
+
+"" complete trigger
+"" let g:ycm_semantic_triggers =  {
+""            \ 'c,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
+""            \ 'cs,lua,javascript': ['re!\w{2}'],
+""            \ }
+
 
 "" =====================
 "" SYMBLE FINDING / DEFINITION
@@ -140,7 +157,7 @@ let g:gutentags_ctags_tagfile = '.tags'
 "" Enable gtags
 let g:gutentags_modules = []
 if executable('gtags-cscope') && executable('gtags')
-	let g:gutentags_modules += ['gtags_cscope']
+    let g:gutentags_modules += ['gtags_cscope']
 endif
 
 "" Put the tag files into ~/.cache/tags directory
@@ -173,7 +190,7 @@ let g:asyncrun_open = 6
 let g:asyncrun_bell = 1
 
 "" set rootmark to identify project root
-let g:asyncrun_rootmarks = ['.svn', '.git', '.root', '_darcs', 'build.xml'] 
+let g:asyncrun_rootmarks = ['.svn', '.git', '.root', '_darcs', 'build.xml']
 
 "" Toggle quickfix window (F10)
 nnoremap <F10> :call asyncrun#quickfix_toggle(6)<cr>
@@ -216,3 +233,6 @@ command! BuildHelp call BuildHelp()
 "" diff check
 set updatetime=100
 command! Diff :SignifyDiff
+
+"" =====================
+noremap <F2> :LeaderfFunction!<cr>
