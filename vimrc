@@ -3,7 +3,7 @@
 call plug#begin('~/.vim/plugged')
 
 "" Formater
-Plug 'rhysd/vim-clang-format', { 'on': 'ClangFormat'}
+""Plug 'rhysd/vim-clang-format', { 'on': 'ClangFormat'}
 
 "" colorscheme list
 "" More scheme:
@@ -15,12 +15,11 @@ Plug 'rhysd/vim-clang-format', { 'on': 'ClangFormat'}
 "" Plug 'tyrannicaltoucan/vim-deep-space'
 Plug 'jacoborus/tender.vim'
 
-"" global tag system
-Plug 'ludovicchabant/vim-gutentags'
-Plug 'skywind3000/gutentags_plus'
-
 "" management preview window
 Plug 'skywind3000/vim-preview'
+
+"" tags
+Plug 'ludovicchabant/vim-gutentags'
 
 "" build project asynchronously
 Plug 'skywind3000/asyncrun.vim'
@@ -29,12 +28,10 @@ Plug 'skywind3000/asyncrun.vim'
 Plug 'Yggdroot/LeaderF'
 
 "" complete
-"" FIXME need python3 support
-"" Plug 'ycm-core/YouCompleteMe'
+Plug 'ycm-core/YouCompleteMe'
 
 "" dynamic syntax check
-"" FIXME too slow Orz
-""Plug 'dense-analysis/ale'
+Plug 'dense-analysis/ale'
 
 "" diif check
 Plug 'mhinz/vim-signify', { 'branch': 'legacy' }
@@ -48,6 +45,10 @@ Plug 'sgur/vim-textobj-parameter'
 
 "" hotkey extention
 Plug 'tpope/vim-unimpaired'
+
+Plug 'racer-rust/vim-racer'
+
+Plug 'rust-lang/rust.vim'
 
 ""
 call plug#end()
@@ -112,7 +113,6 @@ colorscheme tender
 "" set line number color
 highlight LineNr ctermfg=black ctermbg=60
 
-
 "" =====================
 "" FORMAT SETTING
 "" auto format space and tab before save↵
@@ -120,7 +120,7 @@ command Cln :silent! 1,$s/\t/    /g | :silent! 1,$s/\ \+$//g
 autocmd BufWritePre *.c,*.h,*.py,*.cpp,*.sh :Cln
 
 "" auto format with clang-format
-autocmd BufWritePre *.c,*.h,*.cpp :ClangFormat
+""autocmd BufWritePre *.c,*.h,*.cpp :ClangFormat
 
 "" show format character
 set listchars=eol:↵,tab:»·,trail:╳,extends:»,precedes:«
@@ -136,47 +136,26 @@ inoremap {<CR> {<CR>}<Esc>ko
 
 "" YCM SETTINGS
 "" minimun coplete charactor
-"" let g:ycm_min_num_identifier_candidate_chars = 2
+let g:ycm_min_num_identifier_candidate_chars = 2
 
 "" complete trigger
-"" let g:ycm_semantic_triggers =  {
-""            \ 'c,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
-""            \ 'cs,lua,javascript': ['re!\w{2}'],
-""            \ }
-
+let g:ycm_semantic_triggers =  {
+            \ 'c,cpp,python,java,go,erlang,perl,rust': ['re!\w{2}'],
+            \ 'cs,lua,javascript': ['re!\w{2}'],
+            \ }
+let g:ycm_autoclose_preview_window_after_completion = 1
+let g:ycm_language_server =
+\ [
+\   {
+\     'name': 'rust',
+\     'cmdline': ['rust-analyzer'],
+\     'filetypes': ['rust'],
+\     'project_root_files': ['Cargo.toml']
+\   }
+\ ]
 
 "" =====================
-"" SYMBLE FINDING / DEFINITION
-"" gtags
-"" Find the given files to identify in a project or not
-let g:gutentags_project_root = ['.root', '.svn', '.git', '.hg', '.project']
-
-"" tag file name
-let g:gutentags_ctags_tagfile = '.tags'
-
-"" Enable gtags
-let g:gutentags_modules = []
-if executable('ctags')
-	let g:gutentags_modules += ['ctags']
-endif
-if executable('gtags-cscope') && executable('gtags')
-	let g:gutentags_modules += ['gtags_cscope']
-endif
-
-"" ctag config
-let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extra=+q']
-let g:gutentags_ctags_extra_args += ['--c++-kinds=+px']
-let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
-let g:gutentags_ctags_extra_args += ['--output-format=e-ctags']
-
-"" Put the tag files into ~/.cache/tags directory
-let g:gutentags_cache_dir = expand('~/.cache/tags')
-
-"" For avoid auto add other project's data (That might be confuse)
-let g:gutentags_auto_add_gtags_cscope = 0
-
-"" enable advanced commands for debuging
-"" let g:gutentags_define_advanced_commands = 1
+"" ALE
 
 
 "" =====================
@@ -245,3 +224,22 @@ command! Diff :SignifyDiff
 
 "" =====================
 noremap <F2> :LeaderfFunction!<cr>
+
+set backspace=indent,eol,start
+
+let g:racer_cmd="/Users/songpeicheng/.cargo/bin/racer"
+
+set hidden
+let g:racer_cmd = "/Users/songpeicheng/.cargo/bin/racer"
+
+let mapleader = ','
+augroup Racer
+    autocmd!
+    autocmd FileType rust nmap <buffer> gd         <Plug>(rust-def)
+    autocmd FileType rust nmap <buffer> gD         <C-t>
+    autocmd FileType rust nmap <buffer> gs         <Plug>(rust-def-split)
+    autocmd FileType rust nmap <buffer> gx         <Plug>(rust-def-vertical)
+    autocmd FileType rust nmap <buffer> gt         <Plug>(rust-def-tab)
+    autocmd FileType rust nmap <buffer> <leader>gd <Plug>(rust-doc)
+    autocmd FileType rust nmap <buffer> <leader>gD <Plug>(rust-doc-tab)
+augroup END
